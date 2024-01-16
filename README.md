@@ -26,4 +26,4 @@
 
 # 相关项目
 
-1. [ESP32_S2_PICO](/sangyuxiaowu/ESP32_S2_PICO)
+1. [ESP32_S2_PICO](https://github.com/sangyuxiaowu/ESP32_S2_PICO)
