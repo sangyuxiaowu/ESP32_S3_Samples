@@ -1,9 +1,7 @@
 ﻿
 
 using Iot.Device.Ws28xx.Esp32;
-using System;
 using System.Drawing;
-using System.Reflection;
 using System.Threading;
 
 namespace ProjectImprovWifi.WorkLed
@@ -18,7 +16,8 @@ namespace ProjectImprovWifi.WorkLed
         /// <summary>
         /// 板载 RGB 灯
         /// </summary>
-        static XL_WS2812B leddev;
+        static XlWs2812b leddev;
+        Ws2812c led;
 
         /// <summary>
         /// 灯光图片
@@ -49,7 +48,7 @@ namespace ProjectImprovWifi.WorkLed
         public BoardLedControl(int pin = 21,int checkDelay = 500)
         {
             WS2812_Pin = pin;
-            leddev = new XL_WS2812B(WS2812_Pin, 1, 1);
+            leddev = new XlWs2812b(WS2812_Pin, 1, 1);
             image = leddev.Image;
 
             statusThread = new Thread(() => {
@@ -59,7 +58,6 @@ namespace ProjectImprovWifi.WorkLed
                     {
                         UpdateLedStatus();
                     }
-                    Thread.Sleep(500);
                 }
             });
             statusThread.Start();
@@ -104,8 +102,14 @@ namespace ProjectImprovWifi.WorkLed
                 case RunStatus.Start:
                     LedSet(Color.Blue);
                     break;
+                case RunStatus.OnIdentify:
+                    LedBlink(Color.Blue, 200);
+                    break;
+                case RunStatus.AuthSuccess:
+                    LedSet(Color.Green);
+                    break;
                 case RunStatus.Connecting:
-                    LedBlink(Color.Orange);
+                    LedBlink(Color.Orange, 200);
                     break;
                 case RunStatus.ConfigFailed:
                     LedBlink(Color.Red);
@@ -114,7 +118,7 @@ namespace ProjectImprovWifi.WorkLed
                     LedSet(Color.Red);
                     break;
                 case RunStatus.Working:
-                    LedBreath(Color.Green, 1000, 10);
+                    LedBreath(Color.Green);
                     break;
                 default:
                     LedSet(Color.Black);
@@ -131,10 +135,10 @@ namespace ProjectImprovWifi.WorkLed
         {
             image.SetPixel(0, 0, color);
             leddev.Update();
-            Thread.Sleep(500);
+            Thread.Sleep(delay);
             image.SetPixel(0, 0, Color.Black);
             leddev.Update();
-            Thread.Sleep(500);
+            Thread.Sleep(delay);
         }
 
         /// <summary>
@@ -158,24 +162,32 @@ namespace ProjectImprovWifi.WorkLed
         /// <param name="color">颜色</param>
         /// <param name="duration">时长</param>
         /// <param name="steps">步长</param>
-        public void LedBreath(Color color, int duration, int steps)
+        public void LedBreath(Color color, int duration = 3900, int steps = 20)
         {
+            // 限制参数范围
+            steps = steps < 10 ? 10 : steps;
+            duration = duration < 1000 ? 1000 : duration;
+
             // 计算每一步的暂停时长 (单位：毫秒)  
             int sleepDuration = duration / (2 * steps);
-            for (int i = 0; i < steps; i++)
+            for (int i = 1; i <= steps; i++)
             {
                 // 计算当前明度  
                 float brightness = (float)i / steps;
                 // 设置颜色  
-                Color currentColor = Color.FromArgb((int)(color.A * brightness), color.R, color.G, color.B);
-                Console.WriteLine(currentColor.ToString());
-                Console.WriteLine(sleepDuration.ToString());
+                Color currentColor = Color.FromArgb(
+                    (int)(color.R * brightness),
+                    (int)(color.G * brightness),
+                    (int)(color.B * brightness));
                 LedSet(currentColor, sleepDuration);
             }
             for (int i = steps; i > 0; i--)
             {
                 float brightness = (float)i / steps;
-                Color currentColor = Color.FromArgb((int)(color.A * brightness), color.R, color.G, color.B);
+                Color currentColor = Color.FromArgb(
+                    (int)(color.R * brightness),
+                    (int)(color.G * brightness),
+                    (int)(color.B * brightness));
                 LedSet(currentColor, sleepDuration);
             }
         }

@@ -3,9 +3,9 @@ using nanoFramework.Hardware.Esp32.Rmt;
 
 namespace ProjectImprovWifi.WorkLed
 {
-   internal class XL_WS2812B : Ws28xx
+   internal class XlWs2812b : Ws28xx
     {
-        public XL_WS2812B(int gpioPin, int width, int height = 1)
+        public XlWs2812b(int gpioPin, int width, int height = 1)
             : base(gpioPin, new BitmapImageWs2808(width, height))
         {
             ClockDivider = 2;
