@@ -21,7 +21,7 @@
 
 <p align="center">
 更多文章可关注我的微信公众号：桑榆肖物 <br/>
-<img src="https://open.weixin.qq.com/qr/code?username=gh_c874018d0317" />
+<img src="https://open.weixin.qq.com/qr/code?username=gh_c874018d0317" width="200" height="200"/>
 </p>
 
 # 相关项目
