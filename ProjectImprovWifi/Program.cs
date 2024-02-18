@@ -35,15 +35,15 @@ namespace ProjectImprovWifi
 
             // 读取配置文件
             var configuration = Wireless80211Configuration.GetAllWireless80211Configurations();
-            if (configuration.Length == 0)
+            if (configuration.Length == 0 || string.IsNullOrEmpty(configuration[0].Ssid) || string.IsNullOrEmpty(configuration[0].Password))
             {
                 Console.WriteLine("没有找到wifi配置文件");
             }
             else
             {
                 Console.WriteLine($"SSID: {configuration[0].Ssid}, Password: {configuration[0].Password}");
+                // 执行连接wifi逻辑;
             }
-            
 
             // 初始化用户按键
             var userbtn = gpioController.OpenPin(0, PinMode.InputPullDown);
@@ -52,7 +52,7 @@ namespace ProjectImprovWifi
 
             // 初始化蓝牙配网
             _imp = new Improv();
-            // 被请求授权
+            // 被请求识别
             _imp.OnIdentify += Imp_OnIdentify;
             // 配网成功
             _imp.OnProvisioningComplete += Imp_OnProvisioningComplete;
@@ -73,9 +73,19 @@ namespace ProjectImprovWifi
             _imp.Stop();
             _imp = null;
 
+            AppRun();
 
             Thread.Sleep(Timeout.Infinite);
         }
+
+        /// <summary>
+        /// 主应用程序运行
+        /// </summary>
+        private static void AppRun()
+        {
+            Console.WriteLine("AppRun");
+        }
+
 
         /// <summary>
         /// 配网完成
@@ -91,9 +101,6 @@ namespace ProjectImprovWifi
         /// <summary>
         /// 被请求识别
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
         private static void Imp_OnIdentify(object sender, EventArgs e)
         {
             Console.WriteLine("Identify requested");
@@ -110,21 +117,26 @@ namespace ProjectImprovWifi
         /// <summary>
         /// 用户按键事件
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private static void Userbtn_ValueChanged(object sender, PinValueChangedEventArgs e)
         {
-            if (e.ChangeType == PinEventTypes.Rising)
+            // 记录按键按下时间
+            if (e.ChangeType == PinEventTypes.Falling)
             {
                 lastClickTime = DateTime.UtcNow;
             }
-            if(e.ChangeType == PinEventTypes.Falling)
+            // 按键松开
+            if(e.ChangeType == PinEventTypes.Rising)
             {
                 // 按键按下时间大于 5s，重置wifi配置
                 if ((DateTime.UtcNow - lastClickTime).TotalSeconds > 5)
                 {
-                    //Wireless80211Configuration.GetAllWireless80211Configurations()[0].SaveConfiguration();
+                    // 重置wifi配置
                     Console.WriteLine("Reset wifi configuration");
+                    var wificonfig = new Wireless80211Configuration(0);
+                    wificonfig.Ssid = "";
+                    wificonfig.Password = "";
+                    wificonfig.SaveConfiguration();
+                    _led.DeviceStatus = RunStatus.ClearConfig;
                 }
             }
 

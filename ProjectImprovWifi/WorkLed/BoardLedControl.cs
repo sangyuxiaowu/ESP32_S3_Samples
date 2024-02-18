@@ -44,8 +44,7 @@ namespace ProjectImprovWifi.WorkLed
         /// 工作灯控制
         /// </summary>
         /// <param name="pin">Gpio Pin</param>
-        /// <param name="checkDelay">控制检查间隔</param>
-        public BoardLedControl(int pin = 21,int checkDelay = 500)
+        public BoardLedControl(int pin = 21)
         {
             WS2812_Pin = pin;
             leddev = new XlWs2812b(WS2812_Pin, 1, 1);
@@ -119,6 +118,9 @@ namespace ProjectImprovWifi.WorkLed
                     break;
                 case RunStatus.Working:
                     LedBreath(Color.Green);
+                    break;
+                case RunStatus.ClearConfig:
+                    LedSet(Color.Orange);
                     break;
                 default:
                     LedSet(Color.Black);

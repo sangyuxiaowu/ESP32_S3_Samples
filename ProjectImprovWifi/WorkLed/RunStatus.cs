@@ -41,6 +41,11 @@
         Working,
 
         /// <summary>
+        /// 配置清除成功，橙色常亮
+        /// </summary>
+        ClearConfig,
+
+        /// <summary>
         /// 关闭灯光
         /// </summary>
         Close
