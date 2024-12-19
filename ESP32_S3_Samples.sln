@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{674ADA7C-F1F
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "ProjectImprovWifi", "ProjectImprovWifi\ProjectImprovWifi.nfproj", "{B9252FD4-94C4-486B-981D-088D01CDE7FD}"
 EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "AudioBoard_WM8960", "AudioBoard_WM8960\AudioBoard_WM8960.nfproj", "{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,12 @@ Global
 		{B9252FD4-94C4-486B-981D-088D01CDE7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9252FD4-94C4-486B-981D-088D01CDE7FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9252FD4-94C4-486B-981D-088D01CDE7FD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95B17D8C-CD20-4AD8-ACE7-9C5B3C21B7DC}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
